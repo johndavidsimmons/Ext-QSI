@@ -1,0 +1,26 @@
+{
+  "displayName": "Qualtrics Site Intercept",
+  "name": "qualtrics-site-intercept",
+  "platform": "web",
+  "version": "1.0.0",
+  "description": "Load Qualtrics Site Intercept zone code",
+  "iconPath": "qualtrics_logo.svg",
+  "author": {
+    "name": "John Simmons",
+    "email": "johndavidsimmons@gmail.com"
+  },
+  "viewBasePath": "src/view/",
+  "actions": [
+    {
+      "displayName": "Load Zone Code",
+      "name": "load-zone-code",
+      "schema": {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "properties": {}
+      },
+      "libPath": "src/lib/actions/loadZoneCode.js",
+      "viewPath": "actions/loadZoneCode.html"
+    }
+  ]
+}
