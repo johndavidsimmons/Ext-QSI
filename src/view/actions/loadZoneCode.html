@@ -1,71 +1,99 @@
 <!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8">
     <title>Action</title>
-
+    <link rel="stylesheet" href="//opensource.adobe.com/spectrum-css/2.6.0/spectrum-core.css">
     <style>
-    
-      .error {
+        .error {
         color: red;
+        display: inline;
         font-weight: bold;
+        padding: 1em;
+        position: relative;
+        top: 0.5em;
       }
-
     </style>
-  </head>
-  <body>
-    <h1>Site Intercept Variables</h1>
-    <Label>
-      Zone ID
-      <input id="zoneCode" type="text" minlength="18" maxlength="18" required>
-      <p class="error"></p>
-    </Label>
-    <Label>
-      Organization ID 
-      <input id="organizationId" type="text" minlength="1" required>
-      <p class="error"></p>
-    </Label>  
-    <h3>LOCATION OF SETTINGS IDS HERE</h3>
+</head>
+
+<body>
+    <div class="spectrum" lang="en">
+        <form class="spectrum-Form">
+            <div class="spectrum-Form-item">
+                <label class="spectrum-Form-itemLabel spectrum-FieldLabel--left" for="organizationId">Organization ID*
+                    <svg class="spectrum-Icon spectrum-UIIcon-Asterisk spectrum-FieldLabel-requiredIcon" focusable="false" aria-hidden="true">
+                        <use xlink:href="#spectrum-css-icon-Asterisk" />
+                    </svg></label>
+                <div class="spectrum-Form-itemField">
+                    <input class="spectrum-Textfield" aria-invalid="false" type="text" placeholder="Required" id="organizationId" minlength="1" required>
+                    <p class="error">&nbsp;</p>
+                </div>
+            </div>
+            <div class="spectrum-Form-item">
+                <label class="spectrum-Form-itemLabel spectrum-FieldLabel--left" for="organizationId">Zone ID*</label>
+                <div class="spectrum-Form-itemField">
+                    <input class="spectrum-Textfield" aria-invalid="false" type="text" placeholder="Required" id="zoneCode" minlength="18" maxlength="18" required>
+                    <p class="error">&nbsp;</p>
+                </div>
+            </div>
+        </form>
+        <hr>
+        <h2 class="spectrum-Heading--subtitle1">Organization ID and Zone IDs can be found in Account Settings > Qualtrics IDs</h2>
+    </div>
     <script src="https://assets.adobedtm.com/activation/reactor/extensionbridge/extensionbridge.min.js"></script>
     <script>
-      var zoneCodeInput = document.getElementById("zoneCode");
-      var organizationIdInput = document.getElementById("organizationId");
-      window.extensionBridge.register({
+    var zoneCodeInput = document.getElementById("zoneCode");
+    var organizationIdInput = document.getElementById("organizationId");
+
+    window.extensionBridge.register({
         init: function(info) {
-          if (info.settings) {
-            // TODO Populate form values from persisted settings.
-            zoneCodeInput.value = info.settings.zoneCode,
-            organizationIdInput.value = info.settings.organizationId
-          }
+            if (info.settings) {
+                // TODO Populate form values from persisted settings.
+                zoneCodeInput.value = info.settings.zoneCode,
+                    organizationIdInput.value = info.settings.organizationId
+            }
         },
 
         getSettings: function() {
-          // TODO Return settings object from form values.
-          return {
-            zoneCode: zoneCodeInput.value,
-            organizationId: organizationIdInput.value
-          }
+            // TODO Return settings object from form values.
+            return {
+                zoneCode: zoneCodeInput.value,
+                organizationId: organizationIdInput.value
+            }
         },
 
         validate: function() {
 
-          var zoneCodeError = "Zone code is required and must be 18 characters"
-          var orgIdError = "Organization ID is required"
-          if ( zoneCodeInput.checkValidity() && organizationIdInput.checkValidity() ) {
-              return true;
-          } else {
-            if ( !zoneCodeInput.checkValidity() ) {
-              document.querySelector("#zoneCode + p").innerHTML = zoneCodeError;
-              document.querySelector("#zoneCode ").style.border = "2px solid red";
+            var zoneCodeErrorRequired = "Zone ID is required"
+            var zoneCodeErrorLength = "Zone ID must be 18 characters";
+            var zoneCodeErrorEl = document.querySelector("#zoneCode + p");
+            var orgIdError = "Organization ID is required"
+            var orgIdErrorEl = document.querySelector("#organizationId + p");
+            if (zoneCodeInput.checkValidity() && organizationIdInput.checkValidity()) {
+                return true;
+            } else {
+                if (!zoneCodeInput.checkValidity()) {
+                  if ( organizationIdInput.checkValidity() ) {
+                      orgIdErrorEl.innerHTML = "";
+                      document.querySelector("#organizationId").style.border = "";
+                  }
+                  if (zoneCodeInput.value.length === 0) {
+                      zoneCodeErrorEl.innerHTML = zoneCodeErrorRequired;
+                  } else if (zoneCodeInput.value.length > 0 && zoneCodeInput.value.length !== 18) {
+                      zoneCodeErrorEl.innerHTML = zoneCodeErrorLength;
+                  }
+                  document.querySelector("#zoneCode").style.border = "2px solid red";
+                }
+                if (!organizationId.checkValidity()) {
+                    orgIdErrorEl.innerHTML = orgIdError;
+                    document.querySelector("#organizationId").style.border = "2px solid red";
+                }
+                return false;
             }
-            if ( !organizationId.checkValidity() ) {
-              document.querySelector("#organizationId + p").innerHTML = orgIdError;
-              document.querySelector("#organizationId ").style.border = "2px solid red";
-            }
-            return false;
-          }
         }
-      });
+    });
     </script>
-  </body>
+</body>
+
 </html>
