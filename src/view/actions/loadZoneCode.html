@@ -40,6 +40,7 @@
         </form>
         <hr>
         <h2 class="spectrum-Heading--subtitle1">Organization ID and Zone IDs can be found in Account Settings > Qualtrics IDs</h2>
+        <h3 class="spectrum-Heading--subtitle2">Information on zone deployment and where to find IDs can be <a href="https://www.qualtrics.com/support/website-app-feedback/getting-started-with-website-app-feedback/website-app-feedback-technical-documentation/" target="_blank">found here</a></h3>
     </div>
     <script src="https://assets.adobedtm.com/activation/reactor/extensionbridge/extensionbridge.min.js"></script>
     <script>
@@ -49,14 +50,12 @@
     window.extensionBridge.register({
         init: function(info) {
             if (info.settings) {
-                // TODO Populate form values from persisted settings.
                 zoneCodeInput.value = info.settings.zoneCode,
-                    organizationIdInput.value = info.settings.organizationId
+                organizationIdInput.value = info.settings.organizationId
             }
         },
 
         getSettings: function() {
-            // TODO Return settings object from form values.
             return {
                 zoneCode: zoneCodeInput.value,
                 organizationId: organizationIdInput.value
@@ -64,30 +63,31 @@
         },
 
         validate: function() {
-
             var zoneCodeErrorRequired = "Zone ID is required"
             var zoneCodeErrorLength = "Zone ID must be 18 characters";
             var zoneCodeErrorEl = document.querySelector("#zoneCode + p");
+
             var orgIdError = "Organization ID is required"
             var orgIdErrorEl = document.querySelector("#organizationId + p");
+
             if (zoneCodeInput.checkValidity() && organizationIdInput.checkValidity()) {
                 return true;
             } else {
                 if (!zoneCodeInput.checkValidity()) {
                   if ( organizationIdInput.checkValidity() ) {
                       orgIdErrorEl.innerHTML = "";
-                      document.querySelector("#organizationId").style.border = "";
+                      organizationIdInput.style.border = "";
                   }
                   if (zoneCodeInput.value.length === 0) {
                       zoneCodeErrorEl.innerHTML = zoneCodeErrorRequired;
                   } else if (zoneCodeInput.value.length > 0 && zoneCodeInput.value.length !== 18) {
                       zoneCodeErrorEl.innerHTML = zoneCodeErrorLength;
                   }
-                  document.querySelector("#zoneCode").style.border = "2px solid red";
+                  zoneCodeInput.style.border = "2px solid red";
                 }
                 if (!organizationId.checkValidity()) {
                     orgIdErrorEl.innerHTML = orgIdError;
-                    document.querySelector("#organizationId").style.border = "2px solid red";
+                    organizationIdInput.style.border = "2px solid red";
                 }
                 return false;
             }
