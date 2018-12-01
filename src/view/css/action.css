@@ -1,0 +1,8 @@
+.error {
+        color: red;
+        display: inline;
+        font-weight: bold;
+        padding: 1em;
+        position: relative;
+        top: 0.5em;
+  }
